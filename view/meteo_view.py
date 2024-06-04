@@ -88,3 +88,10 @@ class MeteoMap:
             info = get_weather_info(airport, lat, lon)
             zone = MeteoZone(self.canvas, x, y, size, color, info)
             self.zones.append(zone)
+            
+    def on_resize(self, event):
+        # Recalcule la taille et replace l'image sur le canvas
+        self.update_canvas_size()
+        self.canvas.coords(self.image_on_canvas, 0, 0)
+        self.map_photo = ImageTk.PhotoImage(self.map_image)
+        self.canvas.itemconfig(self.image_on_canvas, image=self.map_photo)
