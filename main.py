@@ -1,7 +1,7 @@
+import os
 import tkinter as tk
 from view.main_view import MainView
 from controller.meteo_controller import MeteoController
-import os
 
 AIRPORTS = {
     'Heathrow': (51.470020, -0.454295),  # London
@@ -16,8 +16,7 @@ def main():
     app = MainView(root)
     root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
     
-  # Utilisation d'un chemin relatif et des barres obliques
-    map_image_path = os.path.join(os.path.dirname(__file__), "assets/world-map.jpg")
+    map_image_path = os.path.join(os.path.dirname(__file__), "assets/world-map.jpg")  # Remplacez par le chemin de votre image de la carte du monde
     controller = MeteoController(root, map_image_path, AIRPORTS)
     controller.generate_zones()
     
