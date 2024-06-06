@@ -11,7 +11,7 @@ BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 class WeatherModel:
     def __init__(self):
         self.cache = {}
-        self.cache_duration = timedelta(minutes=10)  # Cache les résultats pour 10 minutes
+        self.cache_duration = timedelta(minutes=30)  # Cache les résultats pour 30 minutes
         logging.info("WeatherModel initialized with cache duration of 10 minutes.")
 
     def get_weather_info(self, lat, lon):
