@@ -1,27 +1,40 @@
-import tkinter as tk
-from view.main_view import MainView
-from controller.meteo_controller import MeteoController
-import os
+import json
+import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
 
-AIRPORTS = {
-    'Heathrow': (51.470020, -0.454295),  # London
-    'JFK': (40.641311, -73.778139),  # New York
-    'Narita': (35.771987, 140.392850),  # Tokyo
-    'Charles de Gaulle': (49.009690, 2.547924),  # Paris
-    'Sheremetyevo': (55.972642, 37.414589),  # Moscow
-}
+def load_airports(filepath):
+    with open(filepath, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        return data['airports']
+    
+
+def plot_airports(airports):
+    fig, ax = plt.subplots(figsize=(15, 10))
+    m = Basemap(projection='merc', llcrnrlat=-60, urcrnrlat=85, llcrnrlon=-180, urcrnrlon=180, resolution='c')
+    m.drawcoastlines()
+    m.drawcountries()
+    m.fillcontinents(color='lightgray', lake_color='aqua')
+    m.drawmapboundary(fill_color='aqua')
+
+    for airport in airports:
+        lon, lat = airports['lon'], airports['lat']
+        x, y = m(lon, lat)
+        m.plot(x, y, 'bo', markersize=5)
+
+    plt.title('Airports on World Map')
+    plt.show()
+    
+def load_airports(filepath):
+    with open(filepath, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        print(data)  # Ajouter ceci pour voir la structure des données
+        return data['airports']
+
 
 def main():
-    root = tk.Tk()
-    app = MainView(root)
-    root.geometry(f"{root.winfo_screenwidth()}x{root.winfo_screenheight()}")
-    
-  # Utilisation d'un chemin relatif et des barres obliques
-    map_image_path = os.path.join(os.path.dirname(__file__), "assets/world-map.jpg")
-    controller = MeteoController(root, map_image_path, AIRPORTS)
-    controller.generate_zones()
-    
-    root.mainloop()
+    airports_filepath = 'airports.json'
+    airports = load_airports(airports_filepath)
+    plot_airports(airports)
 
 if __name__ == "__main__":
     main()
