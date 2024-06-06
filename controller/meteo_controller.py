@@ -65,6 +65,7 @@ class MeteoController:
 
 def main():
     """Main function to run the program."""
+    
     airport_data_path = "airports.json"
     controller = MeteoController(airport_data_path)
     controller.plot_airports_with_weather()
