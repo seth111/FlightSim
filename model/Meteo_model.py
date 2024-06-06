@@ -5,7 +5,7 @@ BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 
 class WeatherModel:
     def get_weather_info(self, name, lat, lon):
-        complete_url = f"{'http://api.openweathermap.org/data/2.5/weather?'}lat={lat}&lon={lon}&appid={'083fc7320895785e9e01400993070cd3'}&units=metric"
+        complete_url = f"{BASE_URL}lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
         response = requests.get(complete_url)
         data = response.json()
         if data['cod'] == 200:
