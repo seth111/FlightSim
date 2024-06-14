@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Declercq",
+        "lastname": "Nicolas",
+        "email": "n.declercq@gmail.com",
+        "password": "1234",
+        "function": "Admin"
+    },
+    {
+        "id": 2,
+        "name": "Dumont",
+        "lastname": "Pauline",
+        "email": "p.dumont@gmail.com",
+        "password": "pdumont",
+        "function": "Client"
+    },
+    {
+        "id": 3,
+        "name": "Burniaux",
+        "lastname": "Francois",
+        "email": "B.Francois@outlook.be",
+        "password": "Burniaux",
+        "function": "Client"
+    }
+]

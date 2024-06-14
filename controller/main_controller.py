@@ -9,8 +9,9 @@ class MainController:
     def __init__(self, view):
         self.view = view
         self.model = UserModel()
-        
+
     def login(self):
+        email = self.view.email_entry.get()
         email = self.view.email_entry.get()
         password = self.view.password_entry.get()
         if self.model.authenticate(email, password):

@@ -1,107 +1,67 @@
 import tkinter as tk
-from tkinter import PhotoImage
-from PIL import Image, ImageTk
-from controller.main_controller import MainController
-from view.admin_view import AdminView
-from view.pilot_view import PilotView
-from view.client_view import ClientView
-from view.employee_view import EmployeeView
+from tkinter import ttk
 
 class MainView:
     def __init__(self, root):
         self.root = root
-        self.root.title("Flight Simulator")
-        
-        self.controller = MainController(self)
-
+        self.root.title("Page d'accueil")
         self.root.geometry("800x600")
-        self.root.configure(bg="#2c3e50")
+        self.create_widgets()
 
-        self.bg_image = Image.open("assets/plane.png")
-        self.bg_label = tk.Label(self.root, bg="#2c3e50")
+    def create_widgets(self):
+        # Background Image
+        self.bg_image = tk.PhotoImage(file="assets/accueil.jpg")
+        self.bg_label = tk.Label(self.root, image=self.bg_image)
         self.bg_label.place(relwidth=1, relheight=1)
 
-        self.login_frame = tk.Frame(root, bg="#2c3e50")
-        self.register_frame = tk.Frame(root, bg="#2c3e50")
-        self.dashboard_frame = tk.Frame(root, bg="#2c3e50")
+        # Welcome Message
+        self.welcome_msg = tk.Label(self.root, text="Bienvenue sur votre site de réservation de vols pour vos voyages dans l’Europe", font=("Helvetica", 16), bg="white")
+        self.welcome_msg.pack(pady=20)
 
-        self.root.bind("<Configure>", self.resize_background)
+        # Buttons
+        self.login_button = tk.Button(self.root, text="Se connecter", command=self.show_login_form)
+        self.signup_button = tk.Button(self.root, text="Créer un compte", command=self.show_signup_form)
+        self.login_button.pack(side=tk.RIGHT, padx=10)
+        self.signup_button.pack(side=tk.RIGHT)
 
-        self.create_login_frame()
-        
-    def resize_background(self, event):
-        new_width = event.width
-        new_height = event.height
-        resized_image = self.bg_image.resize((new_width, new_height), Image.LANCZOS)
-        self.bg_image_tk = ImageTk.PhotoImage(resized_image)
-        self.bg_label.config(image=self.bg_image_tk)
+    def show_login_form(self):
+        self.login_window = tk.Toplevel(self.root)
+        self.login_window.title("Se connecter")
+        self.login_window.geometry("300x200")
 
-    def create_login_frame(self):
-        self.clear_frames()
-        
-        self.bg_label.place(relwidth=1, relheight=1)
-        
-        tk.Label(self.login_frame, text="Email", fg="white", bg="#2c3e50").grid(row=0, column=0, pady=10)
-        tk.Label(self.login_frame, text="Password", fg="white", bg="#2c3e50").grid(row=1, column=0, pady=10)
-        
-        self.email_entry = tk.Entry(self.login_frame, bg="#ecf0f1")
-        self.password_entry = tk.Entry(self.login_frame, show='*', bg="#ecf0f1")
-        
-        self.email_entry.grid(row=0, column=1, padx=10, pady=10)
-        self.password_entry.grid(row=1, column=1, padx=10, pady=10)
-        
-        login_btn = tk.Button(self.login_frame, text="Login", command=self.controller.login, bg="#3498db", fg="white", relief="flat")
-        register_btn = tk.Button(self.login_frame, text="Register", command=self.create_register_frame, bg="#2ecc71", fg="white", relief="flat")
-        
-        login_btn.grid(row=2, column=0, padx=10, pady=20)
-        register_btn.grid(row=2, column=1, padx=10, pady=20)
-        
-        self.login_frame.pack(fill="both", expand=True)
-        
-    def create_register_frame(self):
-        self.clear_frames()
-        
-        tk.Label(self.register_frame, text="First Name", fg="white", bg="#2c3e50").grid(row=0, column=0, pady=10)
-        tk.Label(self.register_frame, text="Last Name", fg="white", bg="#2c3e50").grid(row=1, column=0, pady=10)
-        tk.Label(self.register_frame, text="Email", fg="white", bg="#2c3e50").grid(row=2, column=0, pady=10)
-        tk.Label(self.register_frame, text="Password", fg="white", bg="#2c3e50").grid(row=3, column=0, pady=10)
-        tk.Label(self.register_frame, text="Role", fg="white", bg="#2c3e50").grid(row=4, column=0, pady=10)
-        
-        self.first_name_entry = tk.Entry(self.register_frame, bg="#ecf0f1")
-        self.last_name_entry = tk.Entry(self.register_frame, bg="#ecf0f1")
-        self.email_entry = tk.Entry(self.register_frame, bg="#ecf0f1")
-        self.password_entry = tk.Entry(self.register_frame, show='*', bg="#ecf0f1")
-        self.role_var = tk.StringVar(value="client")
-        self.role_option_menu = tk.OptionMenu(self.register_frame, self.role_var, "administrateur", "pilote", "employé", "client")
-        self.role_option_menu.config(bg="#ecf0f1")
-        
-        self.first_name_entry.grid(row=0, column=1, padx=10, pady=10)
-        self.last_name_entry.grid(row=1, column=1, padx=10, pady=10)
-        self.email_entry.grid(row=2, column=1, padx=10, pady=10)
-        self.password_entry.grid(row=3, column=1, padx=10, pady=10)
-        self.role_option_menu.grid(row=4, column=1, padx=10, pady=10)
-        
-        register_btn = tk.Button(self.register_frame, text="Register", command=self.controller.register, bg="#3498db", fg="white", relief="flat")
-        back_btn = tk.Button(self.register_frame, text="Back", command=self.create_login_frame, bg="#e74c3c", fg="white", relief="flat")
-        
-        register_btn.grid(row=5, column=0, padx=10, pady=20)
-        back_btn.grid(row=5, column=1, padx=10, pady=20)
-        
-        self.register_frame.pack(fill="both", expand=True)
-        
-    def show_dashboard(self, user):
-        role = user['role']
-        if role == 'administrateur':
-            AdminView(self.root, user, self.controller)
-        elif role == 'pilote':
-            PilotView(self.root, user, self.controller)
-        elif role == 'client':
-            ClientView(self.root, user, self.controller)
-        elif role == 'employé':
-            EmployeeView(self.root, user, self.controller)
-        
-    def clear_frames(self):
-        for frame in [self.login_frame, self.register_frame, self.dashboard_frame]:
-            for widget in frame.winfo_children():
-                widget.destroy()
-            frame.pack_forget()
+        tk.Label(self.login_window, text="Email").pack(pady=5)
+        self.email_entry = tk.Entry(self.login_window)
+        self.email_entry.pack(pady=5)
+
+        tk.Label(self.login_window, text="Mot de passe").pack(pady=5)
+        self.password_entry = tk.Entry(self.login_window, show="*")
+        self.password_entry.pack(pady=5)
+
+        tk.Button(self.login_window, text="Se connecter", command=self.login).pack(pady=20)
+
+    def login(self):
+        # Implementation for login
+        pass
+
+    def show_signup_form(self):
+        self.signup_window = tk.Toplevel(self.root)
+        self.signup_window.title("Créer un compte")
+        self.signup_window.geometry("400x400")
+
+        fields = ["Nom", "Prénom", "Email", "Nationalité", "Numéro de passeport", "Adresse"]
+        self.entries = {}
+        for field in fields:
+            tk.Label(self.signup_window, text=field).pack(pady=5)
+            entry = tk.Entry(self.signup_window)
+            entry.pack(pady=5)
+            self.entries[field] = entry
+
+        tk.Button(self.signup_window, text="Créer", command=self.signup).pack(pady=20)
+
+    def signup(self):
+        # Implementation for signup
+        pass
+
+    def show_flight_search(self):
+        # Implementation for flight search
+        pass
