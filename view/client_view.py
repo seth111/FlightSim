@@ -1,34 +1,25 @@
+import os
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
 
 class ClientView:
-    def __init__(self, root):
+    def init(self, root, user):
         self.root = root
+        self.user = user
         self.root.title("Vue Client")
         self.root.geometry("1024x768")
         self.create_widgets()
 
     def create_widgets(self):
-        # Welcome Message
-        self.welcome_msg = tk.Label(self.root, text="Bienvenue sur votre compte", font=("Helvetica", 16))
-        self.welcome_msg.pack(pady=20)
+        image_path = os.path.join("assets", "client.jpg")
+        if os.path.exists(image_path):
+            self.bg_image = Image.open(image_path)
+            self.bg_image = ImageTk.PhotoImage(self.bg_image)
+            self.bg_label = tk.Label(self.root, image=self.bg_image)
+            self.bg_label.place(relwidth=1, relheight=1)
+        else:
+            print(f"Image file not found: {image_path}")
 
-        # Profile Section
-        self.profile_section = tk.LabelFrame(self.root, text="Profil du Client")
-        self.profile_section.pack(pady=20, padx=20, fill="both", expand="yes")
-
-        self.create_profile()
-
-        # Reservation Section
-        self.reservation_section = tk.LabelFrame(self.root, text="Réservations")
-        self.reservation_section.pack(pady=20, padx=20, fill="both", expand="yes")
-
-        self.create_reservation_list()
-
-    def create_profile(self):
-        # Implementation to display client's profile
-        pass
-
-    def create_reservation_list(self):
-        # Implementation to display list of reservations
-        pass
+        self.info_label = tk.Label(self.root, text=f"Bienvenue, {self.user.first_name} {self.user.last_name}", font=("Helvetica", 16))
+        self.info_label.pack(pady=20)
