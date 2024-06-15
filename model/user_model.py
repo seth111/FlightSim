@@ -46,6 +46,17 @@ class UserModel:
         self.users.append(new_user)
         self.save_users()
         return True
+    
+    def delete_user(self, user_id):
+        for user in self.users:
+            if user['id'] == user_id:
+                self.users.remove(user)
+                self.save_users()
+                return True
+        return False
+
+    def get_users(self):
+        return self.users
 
     def __str__(self):
         return f"{self.name} {self.lastname} - {self.email}"
