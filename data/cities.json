@@ -1,0 +1,23 @@
+[
+    {"city_id": 1, "name": "Paris", "postal_code": "75000", "country": "France"},
+    {"city_id": 2, "name": "Berlin", "postal_code": "10115", "country": "Allemagne"},
+    {"city_id": 3, "name": "Lisbonne", "postal_code": "1100-001", "country": "Portugal"},
+    {"city_id": 4, "name": "Budapest", "postal_code": "1011", "country": "Hongrie"},
+    {"city_id": 5, "name": "Londres", "postal_code": "SW1A 1AA", "country": "Grande bretagne"},
+    {"city_id": 6, "name": "Prague", "postal_code": "110 00", "country": "Republique Tchèque"},
+    {"city_id": 7, "name": "Rome", "postal_code": "00100", "country": "Italie"},
+    {"city_id": 8, "name": "Barcelone", "postal_code": "08001", "country": "Espagne"},
+    {"city_id": 9, "name": "Amsterdam", "postal_code": "1012 JS", "country": "Pays Bas"},
+    {"city_id": 10, "name": "Dublin", "postal_code": "D02 YX28", "country": "Ireland"},
+    {"city_id": 11, "name": "Vienne", "postal_code": "1010", "country": "Australie"},
+    {"city_id": 12, "name": "Madrid", "postal_code": "28001", "country": "Espagne"},
+    {"city_id": 13, "name": "Cracovie", "postal_code": "31-001", "country": "Pologne"},
+    {"city_id": 14, "name": "Reykjavik", "postal_code": "101", "country": "Iceland"},
+    {"city_id": 15, "name": "Istanbul", "postal_code": "34122", "country": "Turkey"},
+    {"city_id": 16, "name": "Florence", "postal_code": "50123", "country": "Italie"},
+    {"city_id": 17, "name": "Copenhague", "postal_code": "1050", "country": "Danemark"},
+    {"city_id": 18, "name": "Zagreb", "postal_code": "10000", "country": "Croatie"},
+    {"city_id": 19, "name": "Stockholm", "postal_code": "111 52", "country": "Suède"},
+    {"city_id": 20, "name": "Thessalonique", "postal_code": "546 25", "country": "Grèce"}
+]
+

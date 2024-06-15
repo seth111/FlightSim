@@ -1,0 +1,30 @@
+[
+    {
+        "flight_id": 1,
+        "airline": "Air France",
+        "departure_airport": "Charles de Gaulle",
+        "arrival_airport": "Berlin Brandenburg",
+        "departure_time": "08:00",
+        "arrival_time": "10:00",
+        "departure_date": "2024-06-15",
+        "arrival_date": "2024-06-15",
+        "duration": "2h",
+        "price_economy": 100,
+        "price_business": 300,
+        "stopover": null
+    },
+    {
+        "flight_id": 2,
+        "airline": "Lufthansa",
+        "departure_airport": "Berlin Brandenburg",
+        "arrival_airport": "Charles de Gaulle",
+        "departure_time": "12:00",
+        "arrival_time": "14:00",
+        "departure_date": "2024-06-15",
+        "arrival_date": "2024-06-15",
+        "duration": "2h",
+        "price_economy": 120,
+        "price_business": 350,
+        "stopover": null
+    }
+]    

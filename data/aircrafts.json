@@ -1,0 +1,5 @@
+[
+    {"aircraft_id": 1, "type": "Avion", "name": "Airbus A320", "premium_seats": 20, "economy_seats": 150, "total_seats": 170, "max_weight": 73500},
+    {"aircraft_id": 2, "type": "Jet Privé", "name": "Gulfstream G650", "premium_seats": 10, "economy_seats": 0, "total_seats": 10, "max_weight": 42000}
+    // Add more aircrafts as needed
+]
