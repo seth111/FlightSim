@@ -1,72 +1,95 @@
+import os
 import tkinter as tk
-from controller.employee_controller import EmployeeController
+from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
+from model.reservation_model import Reservation
 
 class EmployeeView:
-    def __init__(self, root, user, main_controller):
+    def __init__(self, root, user):
         self.root = root
         self.user = user
-        self.main_controller = main_controller
-        self.controller = EmployeeController(self)
+        self.root.title("Vue Employé")
+        self.root.geometry("1024x768")
+        self.create_widgets()
 
-        self.frame = tk.Frame(root, bg="#2c3e50")
-        self.frame.pack(fill="both", expand=True)
+    def create_widgets(self):
+        image_path = os.path.join("assets", "employee.jpg")
+        if os.path.exists(image_path):
+            self.bg_image = Image.open(image_path)
+            self.bg_image = ImageTk.PhotoImage(self.bg_image)
+            self.bg_label = tk.Label(self.root, image=self.bg_image)
+            self.bg_label.place(relwidth=1, relheight=1)
+        else:
+            print(f"Image file not found: {image_path}")
 
-        tk.Label(self.frame, text=f"Employee: {self.user['first_name']} {self.user['last_name']}", fg="white", bg="#2c3e50").pack(pady=20)
+        self.info_label = tk.Label(self.root, text=f"Bienvenue, {self.user.first_name} {self.user.last_name}", font=("Helvetica", 16))
+        self.info_label.pack(pady=20)
 
-        self.create_reservation_button = tk.Button(self.frame, text="Create Reservation", command=self.create_reservation, bg="#3498db", fg="white", relief="flat")
-        self.create_reservation_button.pack(pady=10)
+        self.buttons_frame = tk.Frame(self.root)
+        self.buttons_frame.pack(pady=20)
 
-        self.modify_reservation_button = tk.Button(self.frame, text="Modify Reservation", command=self.modify_reservation, bg="#3498db", fg="white", relief="flat")
-        self.modify_reservation_button.pack(pady=10)
+        self.create_reservation_button = tk.Button(self.buttons_frame, text="Créer Réservation", command=self.create_reservation)
+        self.create_reservation_button.grid(row=0, column=0, padx=10)
 
-        self.assign_seat_button = tk.Button(self.frame, text="Assign Seat", command=self.assign_seat, bg="#3498db", fg="white", relief="flat")
-        self.assign_seat_button.pack(pady=10)
-
-        self.confirm_payment_button = tk.Button(self.frame, text="Confirm Payment", command=self.confirm_payment, bg="#3498db", fg="white", relief="flat")
-        self.confirm_payment_button.pack(pady=10)
-
-        self.delete_client_button = tk.Button(self.frame, text="Delete Client", command=self.delete_client, bg="#3498db", fg="white", relief="flat")
-        self.delete_client_button.pack(pady=10)
-
-        logout_btn = tk.Button(self.frame, text="Logout", command=self.logout, bg="#e74c3c", fg="white", relief="flat")
-        logout_btn.pack(pady=20)
-
-    def view_profile(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Profile", fg="white", bg="#2c3e50").pack(pady=20)
-        tk.Label(self.frame, text=f"ID: {self.user['id']}", fg="white", bg="#2c3e50").pack(pady=5)
-        tk.Label(self.frame, text=f"Name: {self.user['first_name']} {self.user['last_name']}", fg="white", bg="#2c3e50").pack(pady=5)
-        tk.Label(self.frame, text=f"Email: {self.user['email']}", fg="white", bg="#2c3e50").pack(pady=5)
-        tk.Label(self.frame, text=f"Role: {self.user['role']}", fg="white", bg="#2c3e50").pack(pady=5)
+        self.view_reservations_button = tk.Button(self.buttons_frame, text="Voir Réservations", command=self.view_reservations)
+        self.view_reservations_button.grid(row=0, column=1, padx=10)
 
     def create_reservation(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Create Reservation", fg="white", bg="#2c3e50").pack(pady=20)
-        # Implement logic to create reservation
+        self.create_form("Créer Réservation", ["Client", "Vol", "Date de réservation", "Statut"], self.handle_create_reservation)
 
-    def modify_reservation(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Modify Reservation", fg="white", bg="#2c3e50").pack(pady=20)
-        # Implement logic to modify reservation
+    def handle_create_reservation(self, data):
+        if data:
+            reservation_data = {
+                'reservation_id': 'R' + str(len(Reservation.load_reservations('data/reservations.json')) + 1).zfill(4),
+                'client': data['Client'],
+                'flight': data['Vol'],
+                'reservation_date': data['Date de réservation'],
+                'status': data['Statut']
+            }
+            reservations = Reservation.load_reservations('data/reservations.json')
+            reservations.append(Reservation(**reservation_data))
+            Reservation.save_reservations(reservations, 'data/reservations.json')
+            messagebox.showinfo("Succès", "Réservation créée avec succès")
 
-    def assign_seat(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Assign Seat", fg="white", bg="#2c3e50").pack(pady=20)
-        # Implement logic to assign seat
+    def view_reservations(self):
+        columns = ["Client", "Vol", "Date de réservation", "Statut"]
+        reservations = Reservation.load_reservations('data/reservations.json')
+        data = [(r.client, r.flight, r.reservation_date, r.status) for r in reservations]
+        self.view_list("Liste des Réservations", columns, data)
 
-    def confirm_payment(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Confirm Payment", fg="white", bg="#2c3e50").pack(pady=20)
-        # Implement logic to confirm payment
+    def create_form(self, title, fields, submit_command):
+        form_window = tk.Toplevel(self.root)
+        form_window.title(title)
+        form_window.geometry("400x400")
 
-    def delete_client(self):
-        self.clear_frame()
-        tk.Label(self.frame, text="Delete Client", fg="white", bg="#2c3e50").pack(pady=20)
-        # Implement logic to delete client
+        entries = {}
+        for field in fields:
+            tk.Label(form_window, text=field).pack(pady=5)
+            entry = tk.Entry(form_window)
+            entry.pack(pady=5)
+            entries[field] = entry
 
-    def logout(self):
-        self.main_controller.logout()
+        submit_button = tk.Button(form_window, text="Créer", command=lambda: self.submit_form(entries, form_window, submit_command))
+        submit_button.pack(pady=20)
 
-    def clear_frame(self):
-        for widget in self.frame.winfo_children():
-            widget.destroy()
+        return form_window, entries
+
+    def submit_form(self, entries, form_window, submit_command):
+        data = {field: entry.get() for field, entry in entries.items()}
+        submit_command(data)
+        form_window.destroy()
+
+    def view_list(self, title, columns, data):
+        list_window = tk.Toplevel(self.root)
+        list_window.title(title)
+        list_window.geometry("800x600")
+
+        tree = ttk.Treeview(list_window, columns=columns, show='headings')
+        for column in columns:
+            tree.heading(column, text=column)
+            tree.column(column, anchor='w')
+
+        tree.pack(fill=tk.BOTH, expand=True)
+
+        for item in data:
+            tree.insert('', 'end', values=item)

@@ -1,0 +1,5 @@
+[
+    {"company_id": 1, "name": "Air France"},
+    {"company_id": 2, "name": "Lufthansa"}
+    // Add more companies as needed
+]

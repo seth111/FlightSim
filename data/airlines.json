@@ -1,0 +1,12 @@
+[
+    {"id": "1", "name": "Air France"},
+    {"id": "2", "name": "Lufthansa"},
+    {"id": "3", "name": "British Airways"},
+    {"id": "4", "name": "KLM"},
+    {"id": "5", "name": "EasyJet"},
+    {"id": "6", "name": "Ryanair"},
+    {"id": "7", "name": "Iberia"},
+    {"id": "8", "name": "Turkish Airlines"},
+    {"id": "9", "name": "Alitalia"},
+    {"id": "10", "name": "Scandinavian Airlines (SAS)"}
+]

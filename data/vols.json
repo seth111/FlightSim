@@ -1,0 +1,26 @@
+[
+    {"id": "F0001",
+     "compagnie": "RyanAir", 
+     "aeroport_depart": "Charleroi", 
+     "aeroport_arrivee": "Rome", 
+     "heure_depart": "17h", 
+     "heure_arrivee": "20h", 
+     "date_depart": "20/06/2024", 
+     "date_arrivee": "20/06/2024", 
+     "duree": "3h", 
+     "prix": "50 Euros", 
+     "passengers": []}, 
+     
+     {"id": "F0002", 
+     "compagnie": "Ryan Air", 
+     "aeroport_depart": "Li\u00e8ge", 
+     "aeroport_arrivee": "Naple", 
+     "heure_depart": "10h", 
+     "heure_arrivee": "15h", 
+     "date_depart": "12/06/2024", 
+     "date_arrivee": "12/06/2024", 
+     "duree": "5h", 
+     "prix": "50 Euros", 
+     "passengers": []}
+    
+    ]
