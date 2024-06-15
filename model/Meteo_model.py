@@ -9,12 +9,37 @@ API_KEY = '083fc7320895785e9e01400993070cd3'
 BASE_URL = 'http://api.openweathermap.org/data/2.5/weather?'
 
 class WeatherModel:
+    """A class that represents a weather model.
+
+    This class provides methods to fetch weather information for given coordinates
+    and cache the results for a specified duration.
+
+    Attributes:
+        cache (dict): A dictionary to store cached weather data.
+        cache_duration (timedelta): The duration for which the weather data is cached.
+
+    Methods:
+        get_weather_info: Fetches weather information for given coordinates.
+
+    """
+
     def __init__(self):
         self.cache = {}
         self.cache_duration = timedelta(minutes=30)  # Cache les résultats pour 30 minutes
-        logging.info("WeatherModel initialized with cache duration of 10 minutes.")
+        logging.info("WeatherModel initialized with cache duration of 30 minutes.")
 
     def get_weather_info(self, lat, lon):
+        """Fetches weather information for given coordinates.
+
+        Args:
+            lat (float): The latitude of the location.
+            lon (float): The longitude of the location.
+
+        Returns:
+            dict: A dictionary containing the weather information, including temperature,
+                  wind speed, wind direction, and cloudiness.
+
+        """
         logging.debug(f"Fetching weather info for coordinates: lat={lat}, lon={lon}")
         now = datetime.now()
         cache_key = (lat, lon)
