@@ -1,0 +1,62 @@
+[
+    {
+        "user_id": "A2024",
+        "first_name": "Remond",
+        "last_name": "Kamsu",
+        "email": "rkamsu@poo.be",
+        "password": "Administrateur",
+        "role": "administrateur",
+        "nationality": "American",
+        "passport_number": "123456789",
+        "address": "123 Main St, Anytown, USA",
+        "licence": null
+    },
+    {
+        "user_id": "P0002",
+        "first_name": "Mar\u00e9chal",
+        "last_name": "Benjamin",
+        "email": "bm@poo.be",
+        "password": "1234",
+        "role": "pilote",
+        "nationality": "",
+        "passport_number": "",
+        "address": "",
+        "licence": "741753789"
+    },
+    {
+        "user_id": "E0003",
+        "first_name": "G\u00e9d\u00e9on",
+        "last_name": "Owen",
+        "email": "og@poo.be",
+        "password": "1234",
+        "role": "employ\u00e9",
+        "nationality": "",
+        "passport_number": "",
+        "address": "",
+        "licence": null
+    },
+    {
+        "user_id": "C0004",
+        "first_name": "Lucraice",
+        "last_name": "Foya",
+        "email": "fl@poo.be",
+        "password": "1234",
+        "role": "client",
+        "nationality": "Belge",
+        "passport_number": "789654",
+        "address": "rue de la broucheterre 135",
+        "licence": null
+    },
+    {
+        "user_id": "E0005",
+        "first_name": "Premier",
+        "last_name": "Nicola",
+        "email": "np@poo.be",
+        "password": "1234",
+        "role": "employ\u00e9",
+        "nationality": "",
+        "passport_number": "",
+        "address": "",
+        "licence": null
+    }
+]

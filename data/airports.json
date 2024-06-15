@@ -1,0 +1,5 @@
+[
+    {"airport_id": 1, "name": "Charles de Gaulle", "city": "Paris", "street": "Roissy", "postal_code": "95700", "runways": 4, "gates": 100},
+    {"airport_id": 2, "name": "Berlin Brandenburg", "city": "Berlin", "street": "Flughafen", "postal_code": "12521", "runways": 3, "gates": 70}
+    // Add more airports as needed
+]

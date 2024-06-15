@@ -1,48 +1,69 @@
-import tkinter.messagebox as messagebox
+import json
+import os
+import tkinter as tk
+from view.main_view import MainView
 from model.user_model import UserModel
+from model.flight_model import Flight
 
 class MainController:
-    def __init__(self, view):
-        self.view = view
-        self.model = UserModel()
+    def __init__(self, root):
+        self.root = root
+        self.view = MainView(self.root)
+        self.view.on_signup = self.handle_signup  # Connect the signup handler
+        self.view.on_login = self.handle_login  # Connect the login handler
+        self.view.on_search_flights = self.handle_flight_search  # Connect the flight search handler
 
-    def login(self):
-        email = self.view.email_entry.get()
-        password = self.view.password_entry.get()
-        user = self.model.authenticate(email, password)
+    def run(self):
+        self.root.mainloop()
+
+    def handle_login(self, email, password):
+        # Logic for handling login
+        users = UserModel.load_users('data/users.json')
+        user = next((u for u in users if u.email == email and u.password == password), None)
         if user:
-            if user['function'] == 'Admin':
-                self.view.show_admin_dashboard(user['email'])
-            else:
-                self.view.show_dashboard(user['email'])
+            if user.role == 'administrateur':
+                from view.admin_view import AdminView
+                from controller.admin_controller import AdminController
+                admin_root = tk.Toplevel(self.root)
+                admin_view = AdminView(admin_root)
+                admin_controller = AdminController(admin_view)
+                admin_controller.run()
+            elif user.role == 'pilote':
+                from view.pilot_view import PilotView
+                from controller.pilot_controller import PilotController
+                pilot_root = tk.Toplevel(self.root)
+                pilot_view = PilotView(pilot_root)
+                pilot_controller = PilotController(pilot_view)
+                pilot_controller.run()
+            elif user.role == 'employé':
+                from view.employee_view import EmployeeView
+                from controller.employee_controller import EmployeeController
+                employee_root = tk.Toplevel(self.root)
+                employee_view = EmployeeView(employee_root)
+                employee_controller = EmployeeController(employee_view)
+                employee_controller.run()
+            elif user.role == 'client':
+                from view.client_view import ClientView
+                from controller.client_controller import ClientController
+                client_root = tk.Toplevel(self.root)
+                client_view = ClientView(client_root)
+                client_controller = ClientController(client_view, user)
+                client_controller.run()
         else:
-            messagebox.showerror("Login Failed", "Invalid email or password")
-        
+            self.view.show_error_message("Identifiant ou mot de passe incorrect")
 
-    def register(self, name, lastname, email, password):
-        if self.model.register(name, lastname, email, password):
-            messagebox.showinfo("Registration Success", "You have been registered successfully")
-            self.view.create_login_frame()
+    def handle_signup(self, user_data):
+        # Generate unique user ID
+        users = UserModel.load_users('data/users.json')
+        user_data['user_id'] = 'C' + str(len(users) + 1).zfill(4)
+        users.append(UserModel(**user_data))
+        UserModel.save_users(users, 'data/users.json')
+        self.view.show_success_message("Compte créé avec succès")
+
+    def handle_flight_search(self, search_criteria):
+        flights = Flight.load_flights('data/flights.json')
+        matched_flights = [f for f in flights if f.departure_airport == search_criteria['origin'] and f.arrival_airport == search_criteria['destination'] and f.departure_date == search_criteria['departure_date']]
+        if matched_flights:
+            self.view.show_flight_results(matched_flights)
         else:
-            messagebox.showerror("Registration Failed", "Email already exists")
-
-    def update_user(self, user_id, name, lastname, email, password, function):
-        if self.model.update_user(user_id, name, lastname, email, password, function):
-            messagebox.showinfo("Update Success", "User updated successfully")
-        else:
-            messagebox.showerror("Update Failed", "Failed to update user")
-
-    def delete_user(self, user_id):
-        if self.model.delete_user(user_id):
-            messagebox.showinfo("Delete Success", "User deleted successfully")
-        else:
-            messagebox.showerror("Delete Failed", "Failed to delete user")
-
-    def get_users(self):
-        return self.model.get_users()
-    
-    def search_flights(self):
-        departure = self.view.departure_entry.get()
-        arrival = self.view.arrival_entry.get()
-        # Implement flight search logic
-        messagebox.showinfo("Search", f"Searching flights from {departure} to {arrival}")
+            self.view.show_error_message("Aucun vol trouvé pour les critères donnés")

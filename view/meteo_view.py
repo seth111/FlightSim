@@ -1,50 +1,34 @@
-import tkinter as tk
-from PIL import Image, ImageTk
-
-class MeteoZone:
-    def __init__(self, canvas, x, y, size, color, info):
-        self.canvas = canvas
-        self.x = x
-        self.y = y
-        self.size = size
-        self.color = color
-        self.info = info
-        self.draw_zone()
-        self.add_hover_event()
-
-    def draw_zone(self):
-        self.zone_id = self.canvas.create_oval(
-            self.x - self.size, self.y - self.size,
-            self.x + self.size, self.y + self.size,
-            fill=self.color, outline=""
-        )
-        self.text_id = self.canvas.create_text(
-            self.x, self.y - self.size - 10, text=self.info, fill="black", state=tk.HIDDEN
-        )
-
-    def add_hover_event(self):
-        self.canvas.tag_bind(self.zone_id, "<Enter>", self.on_enter)
-        self.canvas.tag_bind(self.zone_id, "<Leave>", self.on_leave)
-
-    def on_enter(self, event):
-        self.canvas.itemconfig(self.text_id, state=tk.NORMAL)
-
-    def on_leave(self, event):
-        self.canvas.itemconfig(self.text_id, state=tk.HIDDEN)
+import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
 
 class MeteoMap:
-    def __init__(self, root, map_image_path):
-        self.root = root
-        self.canvas = tk.Canvas(root)
-        self.canvas.pack(fill=tk.BOTH, expand=True)
+    @staticmethod
+    def plot_airports(airports):
+        fig, ax = plt.subplots(figsize=(15, 10))
+        m = Basemap(projection='merc', llcrnrlat=-60, urcrnrlat=85, llcrnrlon=-180, urcrnrlon=180, resolution='c')
+        m.drawcoastlines()
+        m.drawcountries()
+        m.fillcontinents(color='lightgray', lake_color='aqua')
+        m.drawmapboundary(fill_color='aqua')
 
-        # Chargement de l'image
-        self.map_image = Image.open(map_image_path)
-        self.original_image = self.map_image.copy()
-        self.map_photo = ImageTk.PhotoImage(self.map_image)
-        self.image_on_canvas = self.canvas.create_image(0, 0, anchor=tk.NW, image=self.map_photo)
+        for airport in airports:
+            lon, lat = airport['lon'], airport['lat']
+            x, y = m(lon, lat)
+            m.plot(x, y, 'bo', markersize=5)
+            weather_info = airport.get('weather', {})
+            temp = weather_info.get('temperature', 'N/A')
+            wind_speed = weather_info.get('wind_speed', 'N/A')
+            cloudiness = weather_info.get('cloudiness', 'N/A')
+            plt.text(x, y, f"{airport['name']}\nTemp: {temp}°C\nWind: {wind_speed} m/s\nCloudiness: {cloudiness}%",
+                     fontsize=9, ha='right', color='blue')
 
-        self.zones = []
+<<<<<<< Updated upstream
+        plt.title('Airports on World Map with weather informations')
+        plt.show()
+=======
+HEAD
+        plt.title('Airports on World Map')
+        plt.show()
 
         # Gestion des événements de zoom et de redimensionnement
         self.canvas.bind("<MouseWheel>", self.zoom_with_mouse)
@@ -95,3 +79,4 @@ class MeteoMap:
         self.canvas.coords(self.image_on_canvas, 0, 0)
         self.map_photo = ImageTk.PhotoImage(self.map_image)
         self.canvas.itemconfig(self.image_on_canvas, image=self.map_photo)
+>>>>>>> Stashed changes

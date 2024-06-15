@@ -1,62 +1,42 @@
-import os
 import json
 
 class UserModel:
-    def __init__(self, id=None, name=None, lastname=None, email=None, password=None, function=None):
-        self.id = id
-        self.name = name
-        self.lastname = lastname
+    def __init__(self, user_id, first_name, last_name, email, password, role, nationality, passport_number, address, licence=None):
+        self.user_id = user_id
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
         self.password = password
-        self.function = function
-        
-        self.users_file = 'users.json'
-        self.users = self.load_users()
+        self.role = role
+        self.nationality = nationality
+        self.passport_number = passport_number
+        self.address = address
+        self.licence = licence
 
-    def save_users(self):
-        with open(self.users_file, 'w') as file:
-            json.dump(self.users, file, indent=4)
-    
-    def load_users(self):
-        if not os.path.exists(self.users_file):
+    @staticmethod
+    def from_dict(data):
+        return UserModel(
+            data.get('user_id'),
+            data.get('first_name'),
+            data.get('last_name'),
+            data.get('email'),
+            data.get('password'),
+            data.get('role'),
+            data.get('nationality'),
+            data.get('passport_number'),
+            data.get('address'),
+            data.get('licence')
+        )
+
+    @staticmethod
+    def load_users(filepath):
+        try:
+            with open(filepath, 'r') as file:
+                return [UserModel.from_dict(data) for data in json.load(file)]
+        except (FileNotFoundError, json.JSONDecodeError):
             return []
-        with open(self.users_file, 'r') as file:
-            return json.load(file)
-    
-    def authenticate(self, email, password):
-        for user in self.users:
-            if user['email'] == email and user['password'] == password:
-                return True
-        return False
-    
-    def register(self, name, lastname, email, password, function="Client"):
-        # Check if the email already exists
-        for user in self.users:
-            if user['email'] == email:
-                return False
-        # Create a new user
-        new_user = {
-            "id": len(self.users) + 1,
-            "name": name,
-            "lastname": lastname,
-            "email": email,
-            "password": password,
-            "function": function
-        }
-        self.users.append(new_user)
-        self.save_users()
-        return True
-    
-    def delete_user(self, user_id):
-        for user in self.users:
-            if user['id'] == user_id:
-                self.users.remove(user)
-                self.save_users()
-                return True
-        return False
 
-    def get_users(self):
-        return self.users
-
-    def __str__(self):
-        return f"{self.name} {self.lastname} - {self.email}"
+    @staticmethod
+    def save_users(users, filepath):
+        with open(filepath, 'w') as file:
+            json.dump([user.__dict__ for user in users], file, indent=4)
